@@ -263,7 +263,7 @@ class EDA:
             last_year = df_nat['연도'].max()
             last_pop = df_nat.loc[df_nat['연도'] == last_year, '인구'].values[0]
 
-            years_to_predict = 2035 - int(last_year)
+            years_to_predict = 2035 - last_year
             pred_pop = last_pop + net_change_per_year * years_to_predict
 
             ax.plot(2035, pred_pop, 'ro', label='2035 prediction')
