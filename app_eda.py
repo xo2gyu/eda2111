@@ -247,7 +247,10 @@ class EDA:
             for col in cols_to_numeric:
                 df[col] = pd.to_numeric(df[col], errors='coerce').fillna(0)
 
+            df['연도'] = pd.to_numeric(df['연도'], errors='coerce').fillna(0).astype(int)
+
             df_nat = df[df['지역'] == '전국'].copy()
+            df_nat['연도'] = pd.to_numeric(df_nat['연도'], errors='coerce').fillna(0).astype(int)
             df_nat = df_nat.sort_values('연도')
 
             import matplotlib.pyplot as plt
@@ -260,13 +263,17 @@ class EDA:
             avg_deaths = recent['사망자수(명)'].mean()
             net_change_per_year = avg_births - avg_deaths
 
-            last_year = df['연도'].max()
-            last_pop = df_nat.loc[df_nat['연도'] == last_year, '인구'].values[0]
+            last_year = df_nat['연도'].max()
+            last_pop_row = df_nat[df_nat['연도'] == last_year]
 
-            years_to_predict = 2035 - int(last_year)
-            pred_pop = last_pop + net_change_per_year * years_to_predict
+            if not last_pop_row.empty:
+                last_pop = last_pop_row['인구'].values[0]
+                years_to_predict = 2035 - int(last_year)
+                pred_pop = last_pop + net_change_per_year * years_to_predict
+                ax.plot(2035, pred_pop, 'ro', label='2035 prediction')
+            else:
+                st.warning("Prediction skipped: No population data for last year.")
 
-            ax.plot(2035, pred_pop, 'ro', label='2035 prediction')
             ax.set_title("Population trend")
             ax.set_xlabel("Year")
             ax.set_ylabel("Population")
