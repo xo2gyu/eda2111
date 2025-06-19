@@ -217,26 +217,26 @@ class EDA:
         # 1. 기초통계
         with tabs[0]:
             df = pd.read_csv(uploaded_file)
-	    df_sejong = df[df['지역'] == '세종'].copy()
-	    df_sejong = df_sejong.replace('-', 0)
+	        df_sejong = df[df['지역'] == '세종'].copy()
+	        df_sejong = df_sejong.replace('-', 0)
 
-	    cols_to_numeric = ['인구', '출생아수(명)', '사망자수(명)']
-	    for col in cols_to_numeric:
-   	        df_sejong[col] = pd.to_numeric(df_sejong[col], errors='coerce').fillna(0)
+	        cols_to_numeric = ['인구', '출생아수(명)', '사망자수(명)']
+	        for col in cols_to_numeric:
+   	             df_sejong[col] = pd.to_numeric(df_sejong[col], errors='coerce').fillna(0)
 
-	    st.subheader("전처리된 세종 데이터 미리보기")
-	    st.dataframe(df_sejong)
+	        st.subheader("전처리된 세종 데이터 미리보기")
+	        st.dataframe(df_sejong)
 
-	    st.subheader("요약 통계 (describe)")
-	    st.dataframe(df_sejong.describe())
+	        st.subheader("요약 통계 (describe)")
+	        st.dataframe(df_sejong.describe())
 
-	    st.subheader("데이터프레임 구조 (info)")
-	    from io import StringIO
+	        st.subheader("데이터프레임 구조 (info)")
+	        from io import StringIO
 
-	    buffer = StringIO()
-	    df_sejong.info(buf=buffer)
-	    info_str = buffer.getvalue()
-	    st.text(info_str)
+	        buffer = StringIO()
+	        df_sejong.info(buf=buffer)
+	        info_str = buffer.getvalue()
+	        st.text(info_str)
 
 
         # 2. 연도별 추이
