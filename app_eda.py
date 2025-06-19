@@ -222,7 +222,7 @@ class EDA:
 
 	        cols_to_numeric = ['인구', '출생아수(명)', '사망자수(명)']
 	        for col in cols_to_numeric:
-   	             df_sejong[col] = pd.to_numeric(df_sejong[col], errors='coerce').fillna(0)
+   	            df_sejong[col] = pd.to_numeric(df_sejong[col], errors='coerce').fillna(0)
 
 	        st.subheader("전처리된 세종 데이터 미리보기")
 	        st.dataframe(df_sejong)
