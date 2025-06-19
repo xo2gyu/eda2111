@@ -354,12 +354,19 @@ class EDA:
             df_sorted = df.sort_values(['지역', '연도'])
             df_sorted['증감'] = df_sorted.groupby('지역')['인구'].diff().fillna(0)
 
+            # 숫자 포맷
             df_sorted['인구'] = df_sorted['인구'].map('{:,.0f}'.format)
             df_sorted['증감_표시'] = df_sorted['증감'].map('{:,.0f}'.format)
 
+            # 상위 100개 변화량
             top_diff = df_sorted.sort_values('증감', ascending=False).head(100)
 
+            # 셀 색상 지정 함수
             def highlight_diff(val):
+                try:
+                    val = float(val.replace(',', ''))  # 문자열 숫자를 float으로
+                except:
+                    return ''
                 color = ''
                 if val > 0:
                     color = f'background-color: rgba(0, 0, 255, {min(0.5 + abs(val)/top_diff["증감"].max(), 1):.2f})'
@@ -367,9 +374,10 @@ class EDA:
                     color = f'background-color: rgba(255, 0, 0, {min(0.5 + abs(val)/abs(top_diff["증감"].min()), 1):.2f})'
                 return color
 
-            styled_df = top_diff[['연도', '지역', '인구', '증감_표시']].style.apply(
-                lambda x: [highlight_diff(v) for v in top_diff['증감']], axis=1
-            ).set_properties(**{'text-align': 'center'})
+            # 스타일 적용: 증감_표시 컬럼만 색상 입힘
+            styled_df = top_diff[['연도', '지역', '인구', '증감_표시']].style \
+                .applymap(highlight_diff, subset=['증감_표시']) \
+                .set_properties(**{'text-align': 'center'})
 
             st.dataframe(styled_df)
 
