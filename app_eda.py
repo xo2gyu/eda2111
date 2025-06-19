@@ -216,7 +216,7 @@ class EDA:
 
         # 1. 기초통계
         with tabs[0]:
-            df = pd.read_csv(uploaded_file)
+            
 	        df_sejong = df[df['지역'] == '세종'].copy()
 	        df_sejong = df_sejong.replace('-', 0)
 
